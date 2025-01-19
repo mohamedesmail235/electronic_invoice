@@ -106,13 +106,10 @@ doc_events = {
 	},
 	"Material Request": {
 		"validate": "electronic_invoice.utils.warehouse_items.material_request_check_warehouseItem"
-	}
-}
-doc_events = {
+	},
     "Sales Invoice": {
         "validate": ["electronic_invoice.events.accounts.sales_invoice.create_qr_code","electronic_invoice.events.accounts.sales_invoice.update_is_return_reason"],
         "on_trash": "electronic_invoice.events.accounts.sales_invoice.delete_qr_code_file",
-
     }
 }
 # doc_events = {
