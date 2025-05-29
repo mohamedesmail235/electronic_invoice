@@ -6,7 +6,7 @@ import io
 import os
 from base64 import b64encode
 from frappe import _
-from frappe.utils.data import add_to_date, get_time, getdate
+from frappe.utils.data import add_to_date, get_time, getdate,flt
 
 def create_qr_code(doc, method):
 	"""Create QR Code after inserting Sales Inv
@@ -81,7 +81,7 @@ def create_qr_code(doc, method):
 			invoice_amount = str(doc.grand_total)
 			if hasattr(doc,"custom_grantee_value"):
 				# Invoice Amount
-				invoice_amount = str(((doc.net_total)+(doc.total_taxes_and_charges - (doc.total_advance*0.15)))  - (doc.total_advance+doc.custom_grantee_value))
+				invoice_amount = str(((doc.net_total)+(doc.total_taxes_and_charges - (doc.total_advance*0.15)))  - (doc.total_advance+flt(doc.get("custom_grantee_value"))))
 
 			# invoice_amount = '1000.00'  #
 			tag = bytes([4]).hex()
