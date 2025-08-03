@@ -48,12 +48,12 @@ def create_qr_code(doc, method):
 			# if not seller_name:
 			# 	frappe.throw(_('Arabic name missing for {} in the company document'.format(doc.company)))
 
-			seller_name = doc.company
-			tag = bytes([1]).hex()
-			length = bytes([len(seller_name)]).hex()
-			value = seller_name.encode('utf-8').hex()
-
-			tlv_array.append(''.join([tag, length, value]))
+			# seller_name = doc.company
+			# tag = bytes([1]).hex()
+			# length = bytes([len(seller_name)]).hex()
+			# value = seller_name.encode('utf-8').hex()
+			#
+			# tlv_array.append(''.join([tag, length, value]))
 
 			# VAT Number
 			tax_id = frappe.db.get_value('Company', doc.company, 'tax_id')
@@ -195,3 +195,15 @@ def update_is_return_reason(doc, method):
 		return
 	if doc.is_return==1:
 		doc.is_return_reason="مرتجع"
+
+def update_invoices_with_out_qr():
+	invoices = frappe.db.get_all("Sales Ivoice",filters={"docstatus":1,"qr_code":[""," "]},fields="name",order_by="creation desc")
+	if invoices:
+		for invoice in invoices:
+			try:
+				doc = frappe.get_doc("Sales Invocie",invoice["name"])
+				create_qr_code(doc, method=None)
+				print(f"QR Code created for {doc.name}")
+			except Exception as e:
+				print(f"Error in create_qr_code for {doc.name}")
+				frappe.log_error(title="Error in create_qr_code",message=e)
