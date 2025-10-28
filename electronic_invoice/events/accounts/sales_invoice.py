@@ -199,13 +199,13 @@ def update_is_return_reason(doc, method):
 		doc.is_return_reason="مرتجع"
 
 def update_invoices_with_out_qr():
-    invoices = frappe.db.get_all("Sales Invoice",filters={"docstatus":1,"qr_code":["="," "]},fields="name",order_by="creation desc")
+    invoices = frappe.db.get_all("Sales Invoice",filters={"docstatus":1,"qr_code":["=",""]},fields="name",order_by="creation desc")
     if invoices:
         print("=====Starting=======")
         for invoice in invoices:
             try:
-                doc = frappe.get_doc("Sales Invocie",invoice["name"])
-                create_qr_codes(doc, method=None)
+                doc = frappe.get_doc("Sales Invoice",invoice["name"])
+                create_qr_code(doc, method=None)
                 print(f"QR Code created for {doc.name}")
             except Exception as e:
                 print(f"Error in create_qr_code for {doc.name}")
